@@ -6,6 +6,8 @@ Supports CQUAD4 + CTRIA3, Element CID / Material CID,
 load case filtering and 16/18-metric critical load case reduction.
 """
 
+import sys
+import multiprocessing
 import h5py
 from pyNastran.bdf.bdf import BDF
 from pyNastran.utils.numpy_utils import integer_types
@@ -18,6 +20,12 @@ import time
 import math
 import logging
 from datetime import datetime
+
+
+def resource_path(relative_path):
+    """PyInstaller exe içinde kaynak dosya yolunu döndürür."""
+    base = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base, relative_path)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -1236,6 +1244,14 @@ class LoadExtractionApp:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 if __name__ == '__main__':
+    # Windows'ta PyInstaller exe için zorunlu
+    multiprocessing.freeze_support()
+
+    # console=False exe'de stdout/stderr yoktur; NullDevice'e yönlendir
+    if getattr(sys, 'frozen', False):
+        sys.stdout = open(os.devnull, 'w')
+        sys.stderr = open(os.devnull, 'w')
+
     root = tk.Tk()
     app = LoadExtractionApp(root)
     root.mainloop()
