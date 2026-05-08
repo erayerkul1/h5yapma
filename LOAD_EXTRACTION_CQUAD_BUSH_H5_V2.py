@@ -410,7 +410,7 @@ class LoadExtractionApp:
                          highlightbackground=self.COLORS['border'],
                          highlightthickness=1)
         frame.pack(fill='x', side='bottom', padx=16, pady=(0, 8))
-        tk.Label(frame, text='📋  Process Log',
+        tk.Label(frame, text='  Process Log',
                  font=('Segoe UI', 9, 'bold'),
                  bg=self.COLORS['surface'], fg=self.COLORS['muted']
                  ).pack(anchor='w', padx=12, pady=(8, 2))
@@ -430,11 +430,11 @@ class LoadExtractionApp:
         left = tk.Frame(main, bg=self.COLORS['bg'])
         left.pack(side='left', fill='both', expand=True, padx=(0, 10))
 
-        files_card = self._card(left, '📁  Files & Output')
+        files_card = self._card(left, '  Files & Output')
         files_card.pack(fill='x')
-        self.bdf_widget = self._file_row(files_card, '📄  BDF File',         self._browse_bdf)
-        self.h5_widget  = self._file_row(files_card, '📊  H5 File',          self._browse_h5)
-        self.out_widget = self._file_row(files_card, '📁  Output Directory',  self._browse_output,
+        self.bdf_widget = self._file_row(files_card, '  BDF File',         self._browse_bdf)
+        self.h5_widget  = self._file_row(files_card, '  H5 File',          self._browse_h5)
+        self.out_widget = self._file_row(files_card, '  Output Directory',  self._browse_output,
                                           is_dir=True)
         tk.Frame(files_card, height=6, bg=self.COLORS['surface']).pack()
 
@@ -447,12 +447,12 @@ class LoadExtractionApp:
         self.pshell_pf = tk.Frame(right, bg=self.COLORS['bg'])
 
         self.prop_id_entry = self._param_entry(
-            self.pshell_pf, '📋  Property IDs', 'Enter ALL or 123,456,789')
+            self.pshell_pf, '  Property IDs', 'Enter ALL or 123,456,789')
 
         self.pshell_lc_entry = self._param_entry(
             self.pshell_pf, '⏱  Load Cases', 'Enter ALL or 1,2,3')
 
-        coord_card = self._card(self.pshell_pf, '🔄  Coordinate System')
+        coord_card = self._card(self.pshell_pf, '  Coordinate System')
         coord_card.pack(fill='x', pady=(8, 0))
         for opt in ['Element CID', 'Material CID']:
             tk.Radiobutton(coord_card, text=f'  {opt}',
@@ -472,7 +472,7 @@ class LoadExtractionApp:
         self.bush_pf = tk.Frame(right, bg=self.COLORS['bg'])
 
         self.bush_elem_entry = self._param_entry(
-            self.bush_pf, '🔧  Element IDs', 'Enter ALL or 452,678,890')
+            self.bush_pf, '  Element IDs', 'Enter ALL or 452,678,890')
 
         self.bush_lc_entry = self._param_entry(
             self.bush_pf, '⏱  Load Cases', 'Enter ALL or 1,2,3')
@@ -481,7 +481,7 @@ class LoadExtractionApp:
         self.disp_pf = tk.Frame(right, bg=self.COLORS['bg'])
 
         self.disp_prop_entry = self._param_entry(
-            self.disp_pf, '📋  Property IDs', 'Enter ALL or 123,456,789')
+            self.disp_pf, '  Property IDs', 'Enter ALL or 123,456,789')
 
         self.disp_lc_entry = self._param_entry(
             self.disp_pf, '⏱  Load Cases', 'Enter ALL or 1,2,3')
@@ -490,12 +490,12 @@ class LoadExtractionApp:
         self.stress_pf = tk.Frame(right, bg=self.COLORS['bg'])
 
         self.stress_prop_entry = self._param_entry(
-            self.stress_pf, '📋  Property IDs', 'Enter ALL or 123,456,789')
+            self.stress_pf, '  Property IDs', 'Enter ALL or 123,456,789')
 
         self.stress_lc_entry = self._param_entry(
             self.stress_pf, '⏱  Load Cases', 'Enter ALL or 1,2,3')
 
-        stress_coord = self._card(self.stress_pf, '🔄  Coordinate System')
+        stress_coord = self._card(self.stress_pf, '  Coordinate System')
         stress_coord.pack(fill='x', pady=(8, 0))
         for opt in ['Element CID', 'Material CID']:
             tk.Radiobutton(stress_coord, text=f'  {opt}',
@@ -692,8 +692,8 @@ class LoadExtractionApp:
 
         elapsed = time.time() - start
         self.logger.info('=' * 60)
-        self.logger.info(f'✅ İşlem tamamlandı! ({elapsed:.2f} saniye)')
-        self.logger.info(f'📁 Çıktılar: {self.output_dir}')
+        self.logger.info(f'[OK] İşlem tamamlandı! ({elapsed:.2f} saniye)')
+        self.logger.info(f'[DIR] Çıktılar: {self.output_dir}')
         self.logger.info('=' * 60)
         messagebox.showinfo('Başarılı', f'İşlem Tamamlandı\nSüre: {elapsed:.2f} saniye')
 
@@ -706,7 +706,7 @@ class LoadExtractionApp:
         prop_str = self.prop_id_entry.get().strip()
 
         # ── Read BDF ──────────────────────────────────────────────────────
-        self.logger.info('📂 BDF dosyası okunuyor...')
+        self.logger.info('[FILE] BDF dosyası okunuyor...')
         bdf = BDF()
         bdf.read_bdf(self.bdf_path, encoding='latin1')
         self.logger.info('✓ BDF dosyası okundu')
@@ -720,15 +720,15 @@ class LoadExtractionApp:
 
         # ── Coordinate system ─────────────────────────────────────────────
         is_material = self.coordinate_system.get() == 'Material CID'
-        self.logger.info(f'🔄 Koordinat sistemi: {self.coordinate_system.get()}')
+        self.logger.info(f' Koordinat sistemi: {self.coordinate_system.get()}')
         thetarad_map = {}
         if is_material:
-            self.logger.info("🔄 BDF'den material açıları hesaplanıyor...")
+            self.logger.info(" BDF'den material açıları hesaplanıyor...")
             thetarad_map = compute_thetarad_from_bdf(bdf)
             self.logger.info(f'✓ {len(thetarad_map)} element için açı hesaplandı')
 
         # ── Read H5 ───────────────────────────────────────────────────────
-        self.logger.info('📂 H5 dosyası okunuyor...')
+        self.logger.info('[FILE] H5 dosyası okunuyor...')
         with h5py.File(self.h5_path, 'r') as h5:
             domain_to_subcase = self._read_domains(h5)
 
@@ -750,7 +750,7 @@ class LoadExtractionApp:
                 t3_MX  = np.array(t3['MX']);  t3_MY  = np.array(t3['MY']);  t3_MXY = np.array(t3['MXY'])
                 t3_BMX = np.array(t3['BMX']); t3_BMY = np.array(t3['BMY']); t3_BMXY = np.array(t3['BMXY'])
             else:
-                self.logger.info('ℹ️  H5 içinde TRIA3 verisi bulunamadı, atlanıyor')
+                self.logger.info('  H5 içinde TRIA3 verisi bulunamadı, atlanıyor')
                 t3_dom = t3_eid = np.array([])
                 t3_MX = t3_MY = t3_MXY = t3_BMX = t3_BMY = t3_BMXY = np.array([])
         self.logger.info('✓ H5 dosyası okundu')
@@ -791,7 +791,7 @@ class LoadExtractionApp:
         if has_tria3:
             sources.append(('CTRIA3', t3_dom, t3_eid, t3_MX, t3_MY, t3_MXY, t3_BMX, t3_BMY, t3_BMXY))
 
-        self.logger.info('🔄 Element forces işleniyor (CQUAD4 + CTRIA3)...')
+        self.logger.info(' Element forces işleniyor (CQUAD4 + CTRIA3)...')
         for etype, dom_arr, eid_arr, MX_arr, MY_arr, MXY_arr, BMX_arr, BMY_arr, BMXY_arr in sources:
             for lc_did in np.unique(dom_arr):
                 if int(lc_did) not in target_dids:
@@ -847,7 +847,7 @@ class LoadExtractionApp:
         self.logger.info(f'✓ Element_Load.csv yazıldı ({len(df_elem)} satır)')
 
         # ── Element_Load_Reduced.csv (16 metrik) ──────────────────────────
-        self.logger.info('🔄 Element reduction hesaplanıyor (16 metrik)...')
+        self.logger.info(' Element reduction hesaplanıyor (16 metrik)...')
         critical_elem = extract_critical_pshell(
             element_base_data, 'Element ID', 'Nx', 'Ny', 'Nxy')
         reduced_elem = [{
@@ -887,7 +887,7 @@ class LoadExtractionApp:
         self.logger.info(f'✓ Average_Load.csv yazıldı ({len(df_avg)} satır)')
 
         # ── Average_Load_Reduced.csv (16 metrik) ──────────────────────────
-        self.logger.info('🔄 Average reduction hesaplanıyor (16 metrik)...')
+        self.logger.info(' Average reduction hesaplanıyor (16 metrik)...')
         critical_avg = extract_critical_pshell(
             average_data, 'Property ID', 'Average Nx', 'Average Ny', 'Average Nxy')
         reduced_avg = [{
@@ -909,7 +909,7 @@ class LoadExtractionApp:
     # ─────────────────────────────────────────────────────────────────────────
 
     def run_stress(self):
-        self.logger.info('📂 BDF dosyası okunuyor...')
+        self.logger.info('[FILE] BDF dosyası okunuyor...')
         bdf = BDF()
         bdf.read_bdf(self.bdf_path, encoding='latin1')
         self.logger.info('✓ BDF dosyası okundu')
@@ -922,10 +922,10 @@ class LoadExtractionApp:
         self.logger.info(f'✓ {len(target_pids)} property ID seçildi')
 
         is_material = self.stress_coord_system.get() == 'Material CID'
-        self.logger.info(f'🔄 Koordinat sistemi: {self.stress_coord_system.get()}')
+        self.logger.info(f' Koordinat sistemi: {self.stress_coord_system.get()}')
         thetarad_map = {}
         if is_material:
-            self.logger.info("🔄 BDF'den material açıları hesaplanıyor...")
+            self.logger.info(" BDF'den material açıları hesaplanıyor...")
             thetarad_map = compute_thetarad_from_bdf(bdf)
 
         elem_to_pid = {
@@ -941,7 +941,7 @@ class LoadExtractionApp:
                 element_areas[eid]  = area
                 property_areas[elem.pid] = property_areas.get(elem.pid, 0.0) + area
 
-        self.logger.info('📂 H5 dosyası okunuyor...')
+        self.logger.info('[FILE] H5 dosyası okunuyor...')
         with h5py.File(self.h5_path, 'r') as h5:
             domain_to_subcase = self._read_domains(h5)
             stress_grp = h5.get('NASTRAN/RESULT/ELEMENTAL/STRESS')
@@ -972,7 +972,7 @@ class LoadExtractionApp:
         target_dids, target_sc = self._target_domains(domain_to_subcase, self.stress_lc_entry)
         self.logger.info(f'✓ {len(target_sc)} load case seçildi')
 
-        self.logger.info('🔄 Stress verileri işleniyor...')
+        self.logger.info(' Stress verileri işleniyor...')
         element_stress_data = []
         property_stress = {
             lc_did: {
@@ -1059,7 +1059,7 @@ class LoadExtractionApp:
         pd.DataFrame(average_stress_data).to_csv(os.path.join(self.output_dir, 'Average_Stress.csv'), index=False)
         self.logger.info(f'✓ Average_Stress.csv yazıldı ({len(average_stress_data)} satır)')
 
-        self.logger.info('🔄 Element stress reduction hesaplanıyor (max VM)...')
+        self.logger.info(' Element stress reduction hesaplanıyor (max VM)...')
         crit_e = extract_critical_stress(element_stress_data, 'Element ID')
         red_e  = [{'Property ID': r['Property ID'], 'Element ID': r['Element ID'],
                    'Element Type': r['Element Type'], 'Load Case ID': r['Load Case ID'],
@@ -1070,7 +1070,7 @@ class LoadExtractionApp:
         pd.DataFrame(red_e).to_csv(os.path.join(self.output_dir, 'Element_Stress_Reduced.csv'), index=False)
         self.logger.info(f'✓ Element_Stress_Reduced.csv yazıldı ({len(red_e)} kritik satır)')
 
-        self.logger.info('🔄 Average stress reduction hesaplanıyor (max VM)...')
+        self.logger.info(' Average stress reduction hesaplanıyor (max VM)...')
         crit_a = extract_critical_stress(average_stress_data, 'Property ID')
         red_a  = [{'Property ID': r['Property ID'], 'Load Case ID': r['Load Case ID'],
                    'Avg_Sx_Z1': r['Avg_Sx_Z1'], 'Avg_Sy_Z1': r['Avg_Sy_Z1'], 'Avg_Sxy_Z1': r['Avg_Sxy_Z1'],
@@ -1085,7 +1085,7 @@ class LoadExtractionApp:
     # ─────────────────────────────────────────────────────────────────────────
 
     def run_displacement(self):
-        self.logger.info('📂 BDF dosyası okunuyor...')
+        self.logger.info('[FILE] BDF dosyası okunuyor...')
         bdf = BDF()
         bdf.read_bdf(self.bdf_path, encoding='latin1')
         self.logger.info('✓ BDF dosyası okundu')
@@ -1103,7 +1103,7 @@ class LoadExtractionApp:
             if elem.type in ('CQUAD4', 'CTRIA3') and elem.pid in target_pids:
                 pid_to_nodes.setdefault(elem.pid, set()).update(elem.node_ids)
 
-        self.logger.info('📂 H5 dosyası okunuyor...')
+        self.logger.info('[FILE] H5 dosyası okunuyor...')
         with h5py.File(self.h5_path, 'r') as h5:
             domain_to_subcase = self._read_domains(h5)
             disp_ds   = h5['NASTRAN/RESULT/NODAL/DISPLACEMENT']
@@ -1116,7 +1116,7 @@ class LoadExtractionApp:
         target_dids, target_sc = self._target_domains(domain_to_subcase, self.disp_lc_entry)
         self.logger.info(f'✓ {len(target_sc)} load case seçildi')
 
-        self.logger.info('🔄 Displacement verileri işleniyor...')
+        self.logger.info(' Displacement verileri işleniyor...')
         disp_data = []
         for lc_did in np.unique(d_dom):
             if int(lc_did) not in target_dids:
@@ -1148,7 +1148,7 @@ class LoadExtractionApp:
         df_all.to_csv(os.path.join(self.output_dir, 'Displacement_All.csv'), index=False)
         self.logger.info(f'✓ Displacement_All.csv yazıldı ({len(df_all)} satır)')
 
-        self.logger.info('🔄 Displacement reduction hesaplanıyor (max Magnitude per node)...')
+        self.logger.info(' Displacement reduction hesaplanıyor (max Magnitude per node)...')
         critical = extract_critical_displacement(disp_data)
         reduced  = [{
             'Property ID':  r['Property ID'],
@@ -1168,7 +1168,7 @@ class LoadExtractionApp:
 
     def run_bush(self):
         # ── Read H5 to discover all element IDs ───────────────────────────
-        self.logger.info('📂 H5 dosyası okunuyor...')
+        self.logger.info('[FILE] H5 dosyası okunuyor...')
         with h5py.File(self.h5_path, 'r') as h5:
             domain_to_subcase = self._read_domains(h5)
             cbush       = h5['NASTRAN/RESULT/ELEMENTAL/ELEMENT_FORCE/BUSH']
@@ -1193,7 +1193,7 @@ class LoadExtractionApp:
         self.logger.info(f'✓ {len(target_sc)} load case seçildi')
 
         # ── Extract forces ────────────────────────────────────────────────
-        self.logger.info('🔄 Bush force verileri çıkarılıyor...')
+        self.logger.info(' Bush force verileri çıkarılıyor...')
         bush_data = []
 
         for lc_did in np.unique(dom_arr):
@@ -1226,7 +1226,7 @@ class LoadExtractionApp:
         self.logger.info(f'✓ Bush_Load_Raw.csv yazıldı ({len(df_raw)} satır)')
 
         # ── Bush_Load_Reduced.csv (18 metrik) ─────────────────────────────
-        self.logger.info('🔄 Bush reduction hesaplanıyor (18 metrik)...')
+        self.logger.info(' Bush reduction hesaplanıyor (18 metrik)...')
         critical = extract_critical_rows(bush_data)
         reduced  = [{
             'Element ID':   r['Element ID'],
